@@ -156,6 +156,7 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int tmin(void) {
+  // should not be used in code, since bit 31 is not a number
   return 1 << 31;
 }
 //2
@@ -167,8 +168,8 @@ int tmin(void) {
  *   Rating: 1
  */
 int isTmax(int x) {
-  int tmin = 1 << 31;
-  return !(tmin ^ (~x));
+  // tmax + tmin + 1 == 0 => tmax + (tmax + 1) + 1 == 0 
+  return !(x + (x + 1) + 1) & (!!(x + 1));
 }
 /* 
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
@@ -204,13 +205,14 @@ int negate(int x) {
  *   Rating: 3
  */
 int isAsciiDigit(int x) {
-  int minusX = ~x + 1;
-  int expr1 = 0x30 + minusX;
-  int expr2 = 0x39 + minusX;
-  int tmin = 1 << 31;
-  int isExpr1Pos = (!(expr1 & tmin)) & (!(!(expr1 | 0)));
-  int isExpr2Neg = (expr2 & tmin);
-  return !isExpr1Pos & !isExpr2Neg;
+  long long a = 0x30;
+  long long b = 0x39;
+  long long minusA = ~a + 1;
+  long long minusX = ~x + 1;
+
+  int isALessOrEqualX = 1 + ((x + minusA) >> 63);
+  int isXLessOrEqualB = 1 + ((b + minusX) >> 63);
+  return isALessOrEqualX & isXLessOrEqualB;
 }
 /* 
  * conditional - same as x ? y : z 
@@ -220,7 +222,13 @@ int isAsciiDigit(int x) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
-  return 2;
+  /*
+    x = 0 => !x = 1 => ~x + 1 = 1111
+    x!= 0 => !x = 0 => ~x + 1 = 0000
+  */
+  x = !x;
+  x = ~x + 1;
+  return (~x & y) | (x & z);
 }
 /* 
  * isLessOrEqual - if x <= y  then return 1, else return 0 
@@ -230,7 +238,28 @@ int conditional(int x, int y, int z) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-  return 2;
+  /*  
+  One solution is take in to account all cases where it overflows
+    y = 0110 0100   0110 0100   1110 0100   0000 0000
+
+        x<0, y>0    x>0, y>0    x>0,y<0     x>0,y==0
+    x = 1001 0010   0001 0010   0001 0010   0001 0010
+    ~y= 1001 1011   1001 1011   0001 1011   0000 0000
+
+      = 0010 1110   1010 1110   0010 1110   0001 0010
+  Or convert y to long long => no overflow
+  */
+  // int signX = x >> 31;
+  // int signY = y >> 31;
+  // int sameSign = !(signX ^ signY);
+  // int minusY = ~y + 1;  
+  // int expr = x + minusY;
+  // int isExprNotPos = ((expr >> 31) & 1) | (!expr);
+  // return  (isExprNotPos & sameSign) | 
+  //         (signX & !sameSign);
+  
+  long long minusX = (long long)~x + 1;
+  return 1 + ((y + minusX) >> 63);
 }
 //4
 /* 
@@ -242,7 +271,12 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4 
  */
 int logicalNeg(int x) {
-  return 2;
+  /* We take advantage of -0 = 0 
+  0111 | 1001 -> 1111      1111 + 1 -> 0000 
+  0000 | 0000 -> 0000      0000 + 1 -> 0001
+  */
+  int minusX = ~x + 1;
+  return ((x | minusX) >> 31) + 1;
 }
 /* howManyBits - return the minimum number of bits required to represent x in
  *             two's complement
@@ -257,6 +291,8 @@ int logicalNeg(int x) {
  *  Rating: 4
  */
 int howManyBits(int x) {
+  /*
+  `
   return 0;
 }
 //float
