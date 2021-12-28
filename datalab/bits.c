@@ -223,8 +223,8 @@ int isAsciiDigit(int x) {
  */
 int conditional(int x, int y, int z) {
   /*
-    x = 0 => !x = 1 => ~x + 1 = 1111
-    x!= 0 => !x = 0 => ~x + 1 = 0000
+    x = 0000 => !x = 0001 => ~x + 1 = 1111
+    x!= 0000 => !x = 0000 => ~x + 1 = 0000
   */
   x = !x;
   x = ~x + 1;
@@ -292,8 +292,30 @@ int logicalNeg(int x) {
  */
 int howManyBits(int x) {
   /*
-  `
-  return 0;
+    0000 0000 0000 0001 0100 1001 1000 0111
+  */
+  int signBit, bit16, bit8, bit4, bit2, bit1, bit0;
+  signBit = x >> 31;
+  x = (x & (~signBit)) | (~x & signBit); // flipped neg number
+
+  bit16 = !!(x >> 16) << 4;
+  x = x >> bit16;
+
+  bit8  = !!(x >> 8) << 3;
+  x = x >> bit8;
+
+  bit4  = !!(x >> 4) << 2;
+  x = x >> bit4;
+
+  bit2  = !!(x >> 2) << 1;
+  x = x >> bit2;
+
+  bit1  = !!(x >> 1) << 0;
+  x = x >> bit1;
+
+  bit0  = !!x;
+  
+  return bit16 + bit8 + bit4 + bit2 + bit1 + bit0 + 1;
 }
 //float
 /* 
