@@ -413,14 +413,14 @@ int floatFloat2Int(unsigned uf) {
 unsigned floatPower2(int x) {
   /* |   exp    |  mantisa
     1| 0010 0101| 0101...1
-     | 8 bits   | 23 bits
+     | 8 bits   |  23 bits
   */
   if (x > 127) // x > 1111 1110
     return 0x7F800000;
   else if (x < (-149))
     return 0;
   // denormial
-  else if (-149 <= x && x < (-126))
+  else if (-149 <=x && x < (-126))
     /* 
     2^-149 * mantissa = 2^x
     */
