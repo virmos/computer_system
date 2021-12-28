@@ -421,7 +421,10 @@ unsigned floatPower2(int x) {
     return 0;
   // denormial
   else if (-149 <= x && x < (-126))
-    return 1 << (148 + (~x + 1));
+    /* 
+    2^-149 * mantissa = 2^x
+    */
+    return 1 << (149 + (~x + 1));
   // normial
   else
     return (x + 127) << 23;
