@@ -310,10 +310,10 @@ int howManyBits(int x) {
   bit2  = !!(x >> 2) << 1;
   x = x >> bit2;
 
-  bit1  = !!(x >> 1) << 0;
+  bit1  = !!(x >> 1);
   x = x >> bit1;
 
-  bit0  = !!x;
+  bit0  = x;
   
   return bit16 + bit8 + bit4 + bit2 + bit1 + bit0 + 1;
 }
@@ -330,7 +330,24 @@ int howManyBits(int x) {
  *   Rating: 4
  */
 unsigned floatScale2(unsigned uf) {
-  return 2;
+  /* |   exp    |  mantisa
+    1| 0010 0101| 0101...1
+     | 8 bits   | 23 bits
+  */
+  int param1 = 0x7F800000;
+  int param2 = 0x00800000;
+  int param3 = 0x00FFFFFF;
+  int param4 = 0xFF000000;
+  int expPart = uf & param1;
+  /*uf is NaN or overflow*/
+  if (!(expPart ^ param1)) 
+    return uf;
+  /*uf is denormal, frac*2  */
+  else if (!expPart) 
+    return ((uf & param3) << 1 | (uf & param4));
+  else
+  /*uf is normal, exp + 1  */
+    return uf + param2;
 }
 /* 
  * floatFloat2Int - Return bit-level equivalent of expression (int) f
@@ -345,7 +362,40 @@ unsigned floatScale2(unsigned uf) {
  *   Rating: 4
  */
 int floatFloat2Int(unsigned uf) {
-  return 2;
+  /* |   exp    |  mantisa
+    1| 0010 0101| 0101...1
+     | 8 bits   | 23 bits
+  */
+  int param1 = 0x7F800000;
+  int param2 = 0x80000000;
+  int param3 = 0x007FFFFF;
+  int param4 = 0x00800000;
+  int expPart = uf & param1;
+  int mantissaPart = uf & param3;
+  int signBit = uf & param2;
+  if (!(expPart ^ param1)) 
+    return 0x80000000u;
+  else if (!expPart) 
+    return 0;
+  
+  expPart = (expPart >> 23) - 127;
+  if (expPart < 0) 
+    return 0;
+  // int overflow
+  if (expPart > 31) 
+    return 0x80000000u;
+
+  mantissaPart = mantissaPart | param4;
+  
+  if (expPart > 23)
+    mantissaPart = mantissaPart << (expPart - 23);
+  else
+    mantissaPart = mantissaPart >> (23 - expPart);
+  
+  if (signBit)
+    return ~mantissaPart + 1;
+  else
+    return mantissaPart;
 }
 /* 
  * floatPower2 - Return bit-level equivalent of the expression 2.0^x
@@ -361,5 +411,18 @@ int floatFloat2Int(unsigned uf) {
  *   Rating: 4
  */
 unsigned floatPower2(int x) {
-    return 2;
+  /* |   exp    |  mantisa
+    1| 0010 0101| 0101...1
+     | 8 bits   | 23 bits
+  */
+  if (x > 127) // x > 1111 1110
+    return 0x7F800000;
+  else if (x < (-149))
+    return 0;
+  // denormial
+  else if (-149 <= x && x < (-126))
+    return 1 << (148 + (~x + 1));
+  // normial
+  else
+    return (x + 127) << 23;
 }
