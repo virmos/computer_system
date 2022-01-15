@@ -1,7 +1,7 @@
 # Compiler
 CC = gcc
 
-CFLAGS = -std=c99 -g -O3 -Wall -Werror
+CFLAGS = -std=c99 -g -O2 -Wall -Werror
 
 lab3: lab3.o lab3_helper.o
 	$(CC) $(CFLAGS) -o lab3 lab3.c lab3_helper.c
@@ -32,4 +32,4 @@ lab3_preprocessor.txt: lab3_helper.c lab3_helper.h
 all: lab3
 	@echo "Makefile bootcamp!"
 clean:
-	rm -f lab3 lab3_final *.o *.s *.txt
+	rm -f lab3 lab3_final *.o *.s lab3_helper_preprocessor.txt lab3_preprocessor.txt

@@ -1558,6 +1558,8 @@ main:
 	.string	"time_taken_by_cpu"
 .LASF64:
 	.string	"_IO_FILE"
+.LASF61:
+	.string	"GNU C99 9.3.0 -mtune=generic -march=x86-64 -g -O2 -std=c99 -fasynchronous-unwind-tables -fstack-protector-strong -fstack-clash-protection -fcf-protection"
 .LASF3:
 	.string	"unsigned char"
 .LASF5:
@@ -1584,8 +1586,6 @@ main:
 	.string	"short unsigned int"
 .LASF12:
 	.string	"char"
-.LASF61:
-	.string	"GNU C99 9.3.0 -mtune=generic -march=x86-64 -g -O3 -std=c99 -fasynchronous-unwind-tables -fstack-protector-strong -fstack-clash-protection -fcf-protection"
 .LASF66:
 	.string	"main"
 .LASF36:

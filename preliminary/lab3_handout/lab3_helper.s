@@ -276,7 +276,7 @@ helper_func:
 .LASF3:
 	.string	"helper_func"
 .LASF0:
-	.string	"GNU C99 9.3.0 -mtune=generic -march=x86-64 -g -O3 -std=c99 -fasynchronous-unwind-tables -fstack-protector-strong -fstack-clash-protection -fcf-protection"
+	.string	"GNU C99 9.3.0 -mtune=generic -march=x86-64 -g -O2 -std=c99 -fasynchronous-unwind-tables -fstack-protector-strong -fstack-clash-protection -fcf-protection"
 .LASF2:
 	.string	"/home/rastercube/computer_system/preliminary/lab3_handout"
 	.ident	"GCC: (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0"
