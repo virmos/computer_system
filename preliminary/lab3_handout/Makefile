@@ -22,14 +22,14 @@ lab3.s: lab3.c lab3.h
 lab3_helper.s: lab3_helper.c lab3_helper.h
 	$(CC) $(CFLAGS) -S lab3_helper.c
 
-lab3_helper_preprocessor.txt: lab3.c lab3.h
+lab3_preprocessor.txt: lab3.c lab3.h
 	$(CC) $(CFLAGS) -E lab3.c > lab3_preprocessor.txt
 
-lab3_preprocessor.txt: lab3_helper.c lab3_helper.h
+lab3_helper_preprocessor.txt: lab3_helper.c lab3_helper.h
 	$(CC) $(CFLAGS) -E lab3_helper.c > lab3_helper_preprocessor.txt
 
 .PHONY: all clean
 all: lab3
 	@echo "Makefile bootcamp!"
 clean:
-	rm -f lab3 lab3_final *.o *.s lab3_helper_preprocessor.txt lab3_preprocessor.txt
+	rm -f lab3 lab3_final *.o *.s *.txt
