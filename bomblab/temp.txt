@@ -11,23 +11,23 @@
   40110b:	49 89 e6             	mov    %rsp,%r14
   40110e:	41 bc 00 00 00 00    	mov    $0x0,%r12d
   401114:	4c 89 ed             	mov    %r13,%rbp-------------------------------------------
-  401117:	41 8b 45 00          	mov    0x0(%r13),%eax
+  401117:	41 8b 45 00          	mov    0x0(%r13),%eax     check if number <= 6
   40111b:	83 e8 01             	sub    $0x1,%eax
   40111e:	83 f8 05             	cmp    $0x5,%eax
-  401121:	76 05                	jbe    401128 <phase_6+0x34> # check if number <= 6
+  401121:	76 05                	jbe    401128 <phase_6+0x34>
   401123:	e8 12 03 00 00       	callq  40143a <explode_bomb>
   401128:	41 83 c4 01          	add    $0x1,%r12d
   40112c:	41 83 fc 06          	cmp    $0x6,%r12d
   401130:	74 21                	je     401153 <phase_6+0x5f>
   401132:	44 89 e3             	mov    %r12d,%ebx
-  401135:	48 63 c3             	movslq %ebx,%rax**************************** check rsp + i != rbp
-  401138:	8b 04 84             	mov    (%rsp,%rax,4),%eax
+  401135:	48 63 c3             	movslq %ebx,%rax********************************** 
+  401138:	8b 04 84             	mov    (%rsp,%rax,4),%eax     check rsp + i != rbp
   40113b:	39 45 00             	cmp    %eax,0x0(%rbp)
   40113e:	75 05                	jne    401145 <phase_6+0x51>
   401140:	e8 f5 02 00 00       	callq  40143a <explode_bomb>
   401145:	83 c3 01             	add    $0x1,%ebx
   401148:	83 fb 05             	cmp    $0x5,%ebx
-  40114b:	7e e8                	jle    401135 <phase_6+0x41*****************
+  40114b:	7e e8                	jle    401135 <phase_6+0x41***********************
   40114d:	49 83 c5 04          	add    $0x4,%r13
   401151:	eb c1                	jmp    401114 <phase_6+0x20> -----------------------------
   401153:	48 8d 74 24 18       	lea    0x18(%rsp),%rsi
