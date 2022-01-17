@@ -18,7 +18,45 @@ Input a string of length 6. Each char % 16 represents an offset in string at 0x4
 Phase 6:
 Input 6 distinct numbers between 1-6. Form a singly-linked list that is sorted, based on the order of input.
 
+Secret phase:
+Input DrEvil after answer of phase 4 -> get to secret phase.
+Input 22.
+Requirements: fun7 returns eax == 2
+  fun7 needs to satisfy this
+  + jump to edx >  esi, call recur
+  + jump to edx <  esi, call recur
+  + jump to edx == esi, return eax = 0
+  eax traces: eax = 0 -> eax = rax + rax + 1 -> eax += eax
+                    0 ->        1             ->     2
+  Which means:
+  + rdi -> rdi = *(rdi + 0x8) -> rdi = *(rdi + 0x10)
+  with edx = *rdi
+  + edx = 36 -> edx = 8 -> edx = 22
+  esi is our input, esi needs to be 22
 
+
+
+
+Assembly break down for Secret phase:
+rdi = 0x6030f0, rsi = 1001, eax = 1000  #(rsi - 1)
+edx = *rdi
+if (edx > esi) {
+  rdi = *(rdi + 8);
+  fun7();
+  eax += eax;
+  return;
+} else {
+  eax = 0;
+  if (edx == esi) {
+    return
+  }  
+  if (edx < esi) {
+    rdi = *(rdi + 10);
+    fun7();
+    eax = rax + rax + 1;
+    return;
+  }
+}
 
 Assembly break down for phase6:
 00000000004010f4 <phase_6>:
