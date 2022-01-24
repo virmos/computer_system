@@ -1,4 +1,5 @@
 This file contains materials for one instance of the attacklab.
+Runs programs by -q flag
 
 Files:
 
