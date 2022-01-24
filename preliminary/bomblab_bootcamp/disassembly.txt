@@ -1,0 +1,49 @@
+disassembly of act4
+
+edx = 3*rdi
+rcx = 0x49500c
+eax = edx
+eax = eax & 0xf
+
+while () {
+   if (eax <= 4) {
+      movslq (%rcx,%rax,4),%rax
+      add    %rcx,%rax
+      notrack jmpq *%rax
+   }
+
+   mov    %edx,%eax
+   and    $0xf,%eax
+   edx >= 0 ? jmp while
+}
+
+
+
+0x0000000000401d50 <+0>:     endbr64 
+   0x0000000000401d63 <+19>:    cmp    $0x4,%eax
+   0x0000000000401d66 <+22>:    ja     0x401d83 <compute+51>
+   0x0000000000401d68 <+24>:    movslq (%rcx,%rax,4),%rax
+   0x0000000000401d6c <+28>:    add    %rcx,%rax
+   0x0000000000401d6f <+31>:    notrack jmpq *%rax
+   0x0000000000401d72 <+34>:    nopw   0x0(%rax,%rax,1)
+   0x0000000000401d78 <+40>:    and    $0x1,%edx
+   0x0000000000401d7b <+43>:    mov    %edx,%eax
+   0x0000000000401d7d <+45>:    jmp    0x401d63 <compute+19>
+   0x0000000000401d7f <+47>:    nop
+   0x0000000000401d80 <+48>:    sar    $0x2,%edx
+   0x0000000000401d83 <+51>:    mov    %edx,%eax
+   0x0000000000401d85 <+53>:    and    $0xf,%eax
+   0x0000000000401d88 <+56>:    test   %edx,%edx
+   0x0000000000401d8a <+58>:    jns    0x401d63 <compute+19>
+   0x0000000000401d8c <+60>:    retq   
+   0x0000000000401d8d <+61>:    nopl   (%rax)
+   0x0000000000401d90 <+64>:    add    %edx,%edx
+   0x0000000000401d92 <+66>:    jmp    0x401d83 <compute+51>
+   0x0000000000401d94 <+68>:    nopl   0x0(%rax)
+   0x0000000000401d98 <+72>:    sub    $0x1,%edx
+   0x0000000000401d9b <+75>:    jmp    0x401d83 <compute+51>
+   0x0000000000401d9d <+77>:    nopl   (%rax)
+   0x0000000000401da0 <+80>:    lea    0x9325d(%rip),%rsi        # 0x495004
+   0x0000000000401da7 <+87>:    mov    $0x1,%edi
+   0x0000000000401dac <+92>:    xor    %eax,%eax
+   0x0000000000401dae <+94>:    jmpq   0x44c1f0 <__printf_chk>

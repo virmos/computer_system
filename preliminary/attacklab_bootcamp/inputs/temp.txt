@@ -1,0 +1,65 @@
+run_on_stack:
+    mov %rsp, %rdx            /* store old rsp in rdx */
+    lea -0x8(%rsi), %rsp      /* switch rsp to stack-0x8 */
+    pushq %rdx                /* save old rsp on new stack */
+    callq *%rdi               /* call func (rsp aligned by 16) */
+    popq %rdx                 /* pop old rsp from new stack */
+    mov %rdx, %rsp            /* switch back to old rsp */
+    retq                      /* return to callee on old rsp */
+
+00000000000011df <solve>:
+    11df:	f3 0f 1e fa          	endbr64 
+    11e3:	48 83 ec 38          	sub    $0x38,%rsp
+    11e7:	48 c7 44 24 28 b4 00 	movq   $0xb4,0x28(%rsp)
+    11ee:	00 00 
+    11f0:	48 c7 44 24 08 af 00 	movq   $0xaf,0x8(%rsp)
+    11f7:	00 00 
+    11f9:	48 8d 7c 24 10       	lea    0x10(%rsp),%rdi
+    11fe:	e8 76 00 00 00       	callq  1279 <Gets>
+    1203:	48 8b 54 24 28       	mov    0x28(%rsp),%rdx
+    1208:	48 b8 31 35 32 31 33 	movabs $0x3331323531,%rax
+    120f:	00 00 00 
+    1212:	48 39 c2             	cmp    %rax,%rdx
+    1215:	74 19                	je     1230 <solve+0x51>
+    1217:	48 8b 54 24 08       	mov    0x8(%rsp),%rdx
+    121c:	48 b8 31 38 32 31 33 	movabs $0x3331323831,%rax
+    1223:	00 00 00 
+    1226:	48 39 c2             	cmp    %rax,%rdx
+    1229:	74 11                	je     123c <solve+0x5d>
+    122b:	48 83 c4 38          	add    $0x38,%rsp
+    122f:	c3                   	retq   
+    1230:	bf 13 52 01 00       	mov    $0x15213,%edi
+    1235:	e8 2f ff ff ff       	callq  1169 <win>
+    123a:	eb db                	jmp    1217 <solve+0x38>
+    123c:	bf 13 82 01 00       	mov    $0x18213,%edi
+    1241:	e8 23 ff ff ff       	callq  1169 <win>
+    1246:	eb e3                	jmp    122b <solve+0x4c>
+
+0000000000001169 <win>:
+    1169:	f3 0f 1e fa          	endbr64 
+    116d:	48 83 ec 08          	sub    $0x8,%rsp
+    1171:	81 ff 13 52 01 00    	cmp    $0x15213,%edi
+    1177:	74 2e                	je     11a7 <win+0x3e>
+    1179:	81 ff 13 82 01 00    	cmp    $0x18213,%edi
+    117f:	74 34                	je     11b5 <win+0x4c>
+    1181:	81 ff 13 86 01 00    	cmp    $0x18613,%edi
+    1187:	74 3a                	je     11c3 <win+0x5a>
+    1189:	8b 05 a1 2e 00 00    	mov    0x2ea1(%rip),%eax        # 4030 <mystery>
+    118f:	3d 13 55 01 00       	cmp    $0x15513,%eax
+    1194:	74 3b                	je     11d1 <win+0x68>
+    1196:	48 8d 3d d3 0e 00 00 	lea    0xed3(%rip),%rdi        # 2070 <_IO_stdin_used+0x70>
+    119d:	e8 8e fe ff ff       	callq  1030 <puts@plt>
+    11a2:	48 83 c4 08          	add    $0x8,%rsp
+    11a6:	c3                   	retq   
+    11a7:	48 8d 3d 5a 0e 00 00 	lea    0xe5a(%rip),%rdi        # 2008 <_IO_stdin_used+0x8>
+    11ae:	e8 7d fe ff ff       	callq  1030 <puts@plt>
+    11b3:	eb ed                	jmp    11a2 <win+0x39>
+    11b5:	48 8d 3d dc 0e 00 00 	lea    0xedc(%rip),%rdi        # 2098 <_IO_stdin_used+0x98>
+    11bc:	e8 6f fe ff ff       	callq  1030 <puts@plt>
+    11c1:	eb df                	jmp    11a2 <win+0x39>
+    11c3:	48 8d 3d 5e 0e 00 00 	lea    0xe5e(%rip),%rdi        # 2028 <_IO_stdin_used+0x28>
+    11ca:	e8 61 fe ff ff       	callq  1030 <puts@plt>
+    11cf:	eb d1                	jmp    11a2 <win+0x39>
+    11d1:	48 8d 3d 78 0e 00 00 	lea    0xe78(%rip),%rdi        # 2050 <_IO_stdin_used+0x50>
+    11d8:	e8 53 fe ff ff       	callq  1030 <puts@plt>
+    11dd:	eb c3                	jmp    11a2 <win+0x39>
